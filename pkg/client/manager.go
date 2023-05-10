@@ -35,3 +35,7 @@ func NewClientManager(kubeconfigPath, k8sTokenKey string) *ClientManager {
 
 	return cm
 }
+
+func (selt *ClientManager) InsecureClient() kubernetes.Interface(
+	return self.insecureClient
+	)
