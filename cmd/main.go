@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"k8s.io/klog/v2"
 	"k8s_management/pkg/client"
 )
 
@@ -20,5 +21,11 @@ func main() {
 	flag.Parse()
 	// 初始化这个clientManager
 	clientManager := client.NewClientManager(*kubeconfig, *k8sTokenKey)
-	clientManager.InsecureClient().Discovery()
+
+	// 打印集群基本信息，判断一下是否连通
+	versionInfo, err := clientManager.InsecureClient().Discovery().ServerVersion()
+	if err != nil {
+		klog.Errorf("clientManager.InsecureClient().Discovery().ServerVersion().err:%v", err)
+	}
+	klog.Infof("[clientManager.init.success][version:%+v]", versionInfo.GitVersion, versionInfo.GoVersion, versionInfo.Compiler)
 }
